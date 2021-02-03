@@ -8,13 +8,13 @@ var margin = {
   top: 20,
   right: 20,
   bottom: 20,
-  left: 20
+  left: 50
 };
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+// SVG wrapper, append an SVG group
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -23,32 +23,29 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Import data from csv
-d3.csv("assets/data/data.csv").then(function(healthData){
-  console.log(healthData)
+// CSV impoty
+d3.csv("assets/data/data.csv").then(function(HealthData){
+  console.log(HealthData)
 
-  // Parse health and data numbers
-  healthData.forEach(function(data){
+  // Parse data
+  HealthData.forEach(function(data){
     data.poverty = +data.poverty;
     data.healthcare = +data.healthcare;
   });
 
-  // Create scale functions
+  // Scale functions
   var xLinearScale = d3.scaleLinear()
-  .domain([8, d3.max(healthData, d => d.poverty)])
+  .domain([10, d3.max(HealthData, d => d.poverty)])
   .range([0, width]);
 
 
   var yLinearScale = d3.scaleLinear()
-  .domain([0, d3.max(healthData, d => d.healthcare)])
+  .domain([0, d3.max(HealthData, d => d.healthcare)])
   .range([height, 0]);
 
-  // Create axis functions
+  // Create and append axes
   var bottomAxis = d3.axisBottom(xLinearScale);
   var leftAxis = d3.axisLeft(yLinearScale);
-
-
-  // Append Axes to the chart
 
     chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
@@ -58,8 +55,8 @@ d3.csv("assets/data/data.csv").then(function(healthData){
       .call(leftAxis);
 
   // Create Circles
-      var circlesGroup = chartGroup.selectAll("circle")
-      .data(healthData)
+      chartGroup.selectAll("circle")
+      .data(HealthData)
       .enter()
       .append("circle")
       .attr("cx", d => xLinearScale(d.poverty))
@@ -71,8 +68,8 @@ d3.csv("assets/data/data.csv").then(function(healthData){
 
   //Add state abbr labels to the circles
 
-  var circleLabels = chartGroup.selectAll(".stateText")
-    .data(healthData)
+    chartGroup.selectAll(".stateText")
+    .data(HealthData)
     .enter()
     .append("text")
     .classed('stateText', true)
