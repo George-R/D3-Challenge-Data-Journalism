@@ -54,19 +54,19 @@ d3.csv("assets/data/data.csv").then(function(HealthData){
     chartGroup.append("g")
       .call(leftAxis);
 
-  // Create Circles
+  //  Circles for scatter plot
       chartGroup.selectAll("circle")
       .data(HealthData)
       .enter()
       .append("circle")
       .attr("cx", d => xLinearScale(d.poverty))
       .attr("cy", d => yLinearScale(d.healthcare))
-      .attr("r", "12")
+      .attr("r", "15")
       .classed("stateCircle", true)
 
       
 
-  //Add state abbr labels to the circles
+  //State abbreviation labels
 
     chartGroup.selectAll(".stateText")
     .data(HealthData)
@@ -74,12 +74,12 @@ d3.csv("assets/data/data.csv").then(function(HealthData){
     .append("text")
     .classed('stateText', true)
     .attr("x", d => xLinearScale(d.poverty))
-    .attr("y", d => yLinearScale(d.healthcare))
+    .attr("y", d => yLinearScale(d.healthcare)+5)
     .text(d => d.abbr)
 
  
 
-    // Create axes labels
+    // Axes Labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left )
